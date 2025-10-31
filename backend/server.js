@@ -58,11 +58,14 @@ app.use('/api/auth/login', loginLimiter);
 app.use('/api/auth/register', loginLimiter);
 
 // CORS
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://192.168.31.164:3000',
+  process.env.CLIENT_URL // This will be your Netlify URL in production
+].filter(Boolean); // Remove any undefined values
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://192.168.31.164:3000'
-  ],
+  origin: allowedOrigins,
   credentials: true,
 }));
 
