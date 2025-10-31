@@ -31,8 +31,11 @@ const AddMoney = () => {
   const fetchQRCode = async () => {
     try {
       const response = await userAPI.getSettings();
-      if (response.data.qrCodeImage) {
-        // Use API URL from environment and add timestamp to prevent caching
+      // Use base64 from database if available (for Render), otherwise use file path
+      if (response.data.qrCodeBase64) {
+        setQrCodeUrl(response.data.qrCodeBase64);
+      } else if (response.data.qrCodeImage) {
+        // Fallback to file path for local development
         const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
         const BASE_URL = API_BASE.replace('/api', '');
         const qrUrl = `${BASE_URL}/${response.data.qrCodeImage}?t=${Date.now()}`;

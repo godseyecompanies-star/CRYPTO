@@ -335,9 +335,17 @@ const updateSettings = async (req, res) => {
 
     // Handle file upload for QR code (always saves as payment-qr-code.png, overwrites automatically)
     if (req.file) {
+      const fs = require('fs');
       const newPath = req.file.path.replace(/\\/g, '/');
       settings.qrCodeImage = newPath;
+      
+      // Convert to base64 and store in database (for ephemeral file systems like Render)
+      const imageBuffer = fs.readFileSync(req.file.path);
+      const base64Image = `data:${req.file.mimetype};base64,${imageBuffer.toString('base64')}`;
+      settings.qrCodeBase64 = base64Image;
+      
       console.log('✅ QR code saved:', newPath);
+      console.log('✅ QR code stored in database as base64');
     }
     
     if (req.body.maintenanceMode !== undefined) {

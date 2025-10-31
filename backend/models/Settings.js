@@ -5,6 +5,10 @@ const settingsSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  qrCodeBase64: {
+    type: String,
+    default: '',
+  },
   maintenanceMode: {
     type: Boolean,
     default: false,
